@@ -49,12 +49,12 @@ if ($mform->is_cancelled()) {
 } else if ($data = $mform->get_data()) {
     if ($data->id) {
         $instance->name         = 'backuptest';
-        $instance->status       = 1;
+        $instance->status       = $data->status;
         $instance->customint1       = $data->customint1;
         $instance->timemodified = time();
         $DB->update_record('enrol', $instance);
     }  else {
-        $data->id = $enrol->add_instance($course, array('name'=>'Backup test', 'status'=>2, 'customint1'=>$data->customint1));
+        $data->id = $enrol->add_instance($course, array('name'=>'Backup test', 'status'=>$data->status, 'customint1'=>$data->customint1));
     }
 
     // Now add our auxiliary record with the term.

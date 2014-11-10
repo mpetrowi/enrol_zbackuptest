@@ -14,6 +14,11 @@ class enrol_backuptest_edit_form extends moodleform {
         list($instance, $plugin, $course) = $this->_customdata;
         $coursecontext = context_course::instance($course->id);
 
+        $options = array(ENROL_INSTANCE_ENABLED  => 'Enabled',
+                ENROL_INSTANCE_DISABLED => 'Disabled');
+        $mform->addElement('select', 'status', 'status', $options);
+        $mform->setDefault('status', ENROL_INSTANCE_ENABLED);
+
         $mform->addElement('text', 'term', 'Term.  This is stored in the enrol_backuptest_termmap table and should backup and restore with the course.');
         $mform->setType('term', PARAM_TEXT);
 

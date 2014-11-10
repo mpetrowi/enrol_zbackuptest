@@ -10,7 +10,7 @@ class backup_enrol_backuptest_plugin extends backup_enrol_plugin {
     protected function define_enrol_plugin_structure() {
 
         // Define the virtual plugin element with the condition to fulfill
-        $plugin = $this->get_plugin_element(null, '../../enrol', 'backuptest');
+        $plugin = $this->get_plugin_element(null, '../../enrol', $this->pluginname);
 
         // Create one standard named plugin element (the visible container)
         $pluginwrapper = new backup_nested_element($this->get_recommended_name());
@@ -34,4 +34,23 @@ class backup_enrol_backuptest_plugin extends backup_enrol_plugin {
 
         return $plugin;
     }
+
+    protected function define_enrolment_plugin_structure() {
+
+        // Define the virtual plugin element with the condition to fulfill
+        $plugin = $this->get_plugin_element(null, '../../../../enrol', $this->pluginname);
+
+        // Create one standard named plugin element (the visible container)
+        $pluginwrapper = new backup_nested_element($this->get_recommended_name(), null, array('comment'));
+
+        // connect the visible container ASAP
+        $plugin->add_child($pluginwrapper);
+
+        // set source to populate the data
+        $pluginwrapper->set_source_table('enrol_backuptest_enrolment',
+                array('enrolmentid'  => backup::VAR_PARENTID));
+
+        return $plugin;
+    }
+
 }

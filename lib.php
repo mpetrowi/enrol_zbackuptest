@@ -31,9 +31,51 @@ class enrol_backuptest_plugin extends enrol_plugin {
         return $icons;
     }
 
+    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
+        $actions = array();
+        $context = $manager->get_context();
+        $instance = $ue->enrolmentinstance;
+        $params = $manager->get_moodlepage()->url->params();
+        $params['ue'] = $ue->id;
+        if (has_capability("enrol/manual:manage", $context)) {
+            $url = new moodle_url('/enrol/backuptest/editenrolment.php', $params);
+            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
+        }
+        return $actions;
+    }
+
+
     public function can_hide_show_instance($instance) {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/manual:config', $context);
+    }
+
+    public function can_delete_instance($instance) {
+        $context = context_course::instance($instance->courseid);
+        return has_capability('enrol/manual:config', $context);
+    }
+
+    public function allow_manage(stdClass $instance) {
+        // Users with manage cap may tweak period and status.
+        return true;
+    }
+
+    public function sync_enrols($instance) {
+        global $CFG;
+
+        // Ensure admins are added, just to have something to test with.
+        $admins = get_admins();
+        foreach ($admins as $admin) {
+            $this->enrol_user($instance, $admin->id, null, 0, 0, null, false);
+        }
+    }
+
+    public function add_instance($course, array $fields = NULL) {
+        global $DB;
+        // For simplicity, just make the test enrollments on creation.
+        $instanceid = parent::add_instance($course, $fields);
+        $this->sync_enrols($DB->get_record('enrol', array('id'=>$instanceid)));
+        return $instanceid;
     }
 
     /**
@@ -42,7 +84,7 @@ class enrol_backuptest_plugin extends enrol_plugin {
      * @param backup_enrolments_execution_step $step
      * @param stdClass $enrol
      */
-    public function backup_execution(backup_enrolments_execution_step $step, stdClass $enrol) {
+    public function backup_annotate_custom_fields(backup_enrolments_execution_step $step, stdClass $enrol) {
         // annotate customint1 as a role
         $step->annotate_id('role', $enrol->customint1);
     }
@@ -54,7 +96,11 @@ class enrol_backuptest_plugin extends enrol_plugin {
 
         $instanceid = $this->add_instance($course, (array)$data);
         $step->set_mapping('enrol', $oldid, $instanceid);
+
+        //$this->sync_enrols($DB->get_record('enrol', array('id'=>$instanceid)));
     }
 
-
+    public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid, $oldinstancestatus) {
+        return $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $oldinstancestatus);
+    }
 }
