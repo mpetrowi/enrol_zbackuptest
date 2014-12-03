@@ -37,28 +37,4 @@ class restore_enrol_backuptest_plugin extends restore_enrol_plugin {
         $newitemid = $DB->insert_record('enrol_backuptest_termmap', $data);
     }
 
-    public function define_enrolment_plugin_structure() {
-        return array(
-                new restore_path_element('enrolment', $this->get_pathfor('/')),
-        );
-    }
-
-    /**
-     * Process the comment element
-     */
-    public function process_enrolment($data) {
-        global $DB;
-
-        $data = (object)$data;
-
-        $oldenrolmentid = $this->get_old_parentid('enrolment');
-        $enrolmentid = $this->get_mappingid('enrolment', $oldenrolmentid);
-        if (!$enrolmentid) {
-            return; // Enrolment instance was not restored
-        }
-
-        $data->enrolmentid = $enrolmentid;
-        $newitemid = $DB->insert_record('enrol_backuptest_enrolment', $data);
-    }
-
 }

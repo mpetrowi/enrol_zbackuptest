@@ -31,20 +31,6 @@ class enrol_backuptest_plugin extends enrol_plugin {
         return $icons;
     }
 
-    public function get_user_enrolment_actions(course_enrolment_manager $manager, $ue) {
-        $actions = array();
-        $context = $manager->get_context();
-        $instance = $ue->enrolmentinstance;
-        $params = $manager->get_moodlepage()->url->params();
-        $params['ue'] = $ue->id;
-        if (has_capability("enrol/manual:manage", $context)) {
-            $url = new moodle_url('/enrol/backuptest/editenrolment.php', $params);
-            $actions[] = new user_enrolment_action(new pix_icon('t/edit', ''), get_string('edit'), $url, array('class'=>'editenrollink', 'rel'=>$ue->id));
-        }
-        return $actions;
-    }
-
-
     public function can_hide_show_instance($instance) {
         $context = context_course::instance($instance->courseid);
         return has_capability('enrol/manual:config', $context);
@@ -101,6 +87,6 @@ class enrol_backuptest_plugin extends enrol_plugin {
     }
 
     public function restore_user_enrolment(restore_enrolments_structure_step $step, $data, $instance, $userid, $oldinstancestatus) {
-        return $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $oldinstancestatus);
+        $this->enrol_user($instance, $userid, null, $data->timestart, $data->timeend, $oldinstancestatus);
     }
 }
