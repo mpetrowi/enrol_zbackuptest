@@ -2,7 +2,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/enrol/wisc/lib.php');
+require_once($CFG->dirroot.'/enrol/backuptest/lib.php');
 
 /**
  * Provides the information to restore test enrol instances
