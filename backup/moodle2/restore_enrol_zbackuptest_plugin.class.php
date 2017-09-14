@@ -2,12 +2,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/enrol/backuptest/lib.php');
+require_once($CFG->dirroot.'/enrol/zbackuptest/lib.php');
 
 /**
  * Provides the information to restore test enrol instances
  */
-class restore_enrol_backuptest_plugin extends restore_enrol_plugin {
+class restore_enrol_zbackuptest_plugin extends restore_enrol_plugin {
 
     public function define_enrol_plugin_structure() {
         return array(
@@ -29,12 +29,12 @@ class restore_enrol_backuptest_plugin extends restore_enrol_plugin {
             return; // Enrol instance was not restored
         }
         $type = $DB->get_field('enrol', 'enrol', array('id'=>$enrolid));
-        if ($type !== 'backuptest') {
+        if ($type !== 'zbackuptest') {
             return; // Enrol was likely converted to manual
         }
         $data->enrolid = $enrolid;
         $data->courseid = $this->task->get_courseid();
-        $newitemid = $DB->insert_record('enrol_backuptest_termmap', $data);
+        $newitemid = $DB->insert_record('enrol_zbackuptest_termmap', $data);
     }
 
 }

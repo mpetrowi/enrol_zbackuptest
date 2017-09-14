@@ -5,7 +5,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Provides the information to backup test enrol instances
  */
-class backup_enrol_backuptest_plugin extends backup_enrol_plugin {
+class backup_enrol_zbackuptest_plugin extends backup_enrol_plugin {
 
     protected function define_enrol_plugin_structure() {
 
@@ -28,7 +28,7 @@ class backup_enrol_backuptest_plugin extends backup_enrol_plugin {
         $termmaps->add_child($termmap);
 
         // set source to populate the data
-        $termmap->set_source_table('enrol_backuptest_termmap',
+        $termmap->set_source_table('enrol_zbackuptest_termmap',
                 array('enrolid'  => backup::VAR_PARENTID,
                       'courseid' => backup::VAR_COURSEID));
 

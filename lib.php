@@ -1,22 +1,22 @@
 <?php
 
 /**
- * MDL-47323  backuptest enrol plugin to demonstrate backup and restore.
+ * MDL-47323  zbackuptest enrol plugin to demonstrate backup and restore.
  *
  * This plugin does nothing by itself.  It demonstrates enrol backup/restore.
  *
  * Settings:
  *
  *   Role id - This is stored in customint1, and annotated on backup.
- *   Term - This string is stored in the enrol_backuptest_termmap table should backup/restore with the enrol instance.
+ *   Term - This string is stored in the enrol_zbackuptest_termmap table should backup/restore with the enrol instance.
  *
  * @author Matt Petro
  */
 
-class enrol_backuptest_plugin extends enrol_plugin {
+class enrol_zbackuptest_plugin extends enrol_plugin {
 
     public function get_newinstance_link($courseid) {
-        return new moodle_url('/enrol/backuptest/edit.php', array('courseid'=>$courseid));
+        return new moodle_url('/enrol/zbackuptest/edit.php', array('courseid'=>$courseid));
     }
 
     public function get_action_icons(stdClass $instance) {
@@ -24,7 +24,7 @@ class enrol_backuptest_plugin extends enrol_plugin {
         $context = context_course::instance($instance->courseid);
         $icons = array();
         if (has_capability('enrol/manual:config', $context)) {
-            $editlink = new moodle_url("/enrol/backuptest/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
+            $editlink = new moodle_url("/enrol/zbackuptest/edit.php", array('courseid'=>$instance->courseid, 'id'=>$instance->id));
             $icons[] = $OUTPUT->action_icon($editlink, new pix_icon('t/edit', get_string('edit'), 'core',
                     array('class' => 'iconsmall')));
         }

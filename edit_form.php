@@ -4,7 +4,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
 
-class enrol_backuptest_edit_form extends moodleform {
+class enrol_zbackuptest_edit_form extends moodleform {
 
     function definition() {
         global $CFG, $DB;
@@ -19,7 +19,7 @@ class enrol_backuptest_edit_form extends moodleform {
         $mform->addElement('select', 'status', 'status', $options);
         $mform->setDefault('status', ENROL_INSTANCE_ENABLED);
 
-        $mform->addElement('text', 'term', 'Term.  This is stored in the enrol_backuptest_termmap table and should backup and restore with the course.');
+        $mform->addElement('text', 'term', 'Term.  This is stored in the enrol_zbackuptest_termmap table and should backup and restore with the course.');
         $mform->setType('term', PARAM_TEXT);
 
         $roles = get_assignable_roles($coursecontext);

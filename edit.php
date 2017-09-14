@@ -2,7 +2,7 @@
 
 
 require('../../config.php');
-require_once("$CFG->dirroot/enrol/backuptest/edit_form.php");
+require_once("$CFG->dirroot/enrol/zbackuptest/edit_form.php");
 
 $courseid = required_param('courseid', PARAM_INT);
 $instanceid = optional_param('id', 0, PARAM_INT);
@@ -14,19 +14,19 @@ require_login($course);
 require_capability('moodle/course:enrolconfig', $context);
 require_capability('enrol/manual:config', $context);  // just use manual access control
 
-$PAGE->set_url('/enrol/backuptest/edit.php', array('courseid'=>$course->id, 'id'=>$instanceid));
+$PAGE->set_url('/enrol/zbackuptest/edit.php', array('courseid'=>$course->id, 'id'=>$instanceid));
 $PAGE->set_pagelayout('admin');
 
 $returnurl = new moodle_url('/enrol/instances.php', array('id'=>$course->id));
-if (!enrol_is_enabled('backuptest')) {
+if (!enrol_is_enabled('zbackuptest')) {
     redirect($returnurl);
 }
 
-$enrol = enrol_get_plugin('backuptest');
+$enrol = enrol_get_plugin('zbackuptest');
 
 if ($instanceid) {
-    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'backuptest', 'id'=>$instanceid), '*', MUST_EXIST);
-    $termmap = $DB->get_record('enrol_backuptest_termmap', array('enrolid'=>$instance->id));
+    $instance = $DB->get_record('enrol', array('courseid'=>$course->id, 'enrol'=>'zbackuptest', 'id'=>$instanceid), '*', MUST_EXIST);
+    $termmap = $DB->get_record('enrol_zbackuptest_termmap', array('enrolid'=>$instance->id));
     $instance->term = $termmap->term;
 } else {
     // No instance yet, we have to add new instance.
@@ -37,18 +37,18 @@ if ($instanceid) {
     $instance = new stdClass();
     $instance->id         = null;
     $instance->courseid   = $course->id;
-    $instance->enrol      = 'backuptest';
+    $instance->enrol      = 'zbackuptest';
     $instance->customint1 = '';
 }
 
-$mform = new enrol_backuptest_edit_form(null, array($instance, $enrol, $course));
+$mform = new enrol_zbackuptest_edit_form(null, array($instance, $enrol, $course));
 
 if ($mform->is_cancelled()) {
     redirect($returnurl);
 
 } else if ($data = $mform->get_data()) {
     if ($data->id) {
-        $instance->name         = 'backuptest';
+        $instance->name         = 'zbackuptest';
         $instance->status       = $data->status;
         $instance->customint1       = $data->customint1;
         $instance->timemodified = time();
@@ -63,8 +63,8 @@ if ($mform->is_cancelled()) {
     $termmap->courseid = $course->id;
     $termmap->enrolid = $data->id;
     $termmap->term = $data->term;
-    $DB->delete_records('enrol_backuptest_termmap', array('enrolid'=>$data->id));
-    $DB->insert_record('enrol_backuptest_termmap', $termmap);
+    $DB->delete_records('enrol_zbackuptest_termmap', array('enrolid'=>$data->id));
+    $DB->insert_record('enrol_zbackuptest_termmap', $termmap);
 
     redirect($returnurl);
 }
